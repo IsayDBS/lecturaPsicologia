@@ -1,8 +1,101 @@
 import pandas as pd
+import re
+import os
 
-df = pd.read_excel('../files/13428_2015_684_MOESM1_ESM.xlsx')
-new_dict = df.to_dict()
-print(df.columns)
+#Listado de archivos
+def listadoArchivos():
+    return os.listdir('../files')
+
+#Seleccionador de archivo
+def elegirArchivo(archivo):
+    #Agregar la versión .csv
+    return pd.read_excel(archivo)
+
+#Convertir descripcion en diccionario
+"""Descripcion general de las columnas
+Si es de strings, regresa count, unique, top, freq
+Si es numero, regresa count, mean, std, min, 25, 50, 75, max
+"""
+def decripcionDiccionario(campo , df):
+    return descripcionColumna(campo, df).to_dict()
+
+#Da una descripción general de la columna
+def descripcionColumna(campo, df):
+    #print(df[campo].describe())
+    return df[campo].describe()
+
+#Devuelve el renglón basado en un patrón, utilicese para palabras nada mas
+def busquedaRenglonesPalabrasRegex(palabra, df, campo, listaCamposAmostrar):
+    '''
+    Busca con expresiones regulares con re.search
+    '''
+    for i in df.index:
+        if re.search(palabra , df[campo][i]):
+            aux = ''
+            for j in listaCamposAmostrar:
+                aux = aux + str(df[j][i]) + '| ' # se deciden campos a imprimir
+            print(aux)    
+    #aux = df[df['Word'].str.contains('abeja')] #busca la palabra completa en Word
+
+#Devuelve un renglón basado en uan condición de un número, utilicese para números nada más
+def busquedaRenglonesNumeros(decision ,df, valor_a_comparar, campo, listaCamposAmostrar):
+    for i in df.index:
+        if decisionNumeroRenglon(decision, df[campo][i], valor_a_comparar):
+            aux = ''
+            for j in listaCamposAmostrar:
+                aux = aux + str(df[j][i]) + '| ' # se deciden campos a imprimir
+            print(aux)
+
+#Diferentes decisione para la busqueda por numero
+def decisionNumeroRenglon(decision, renglon, valor_a_comparar):
+    if decision == 0: # ==
+        if renglon == valor_a_comparar:
+            return True
+        else:
+            return False
+    elif decision == 1: # >
+        if renglon > valor_a_comparar:
+            return True
+        else:
+            return False
+    elif decision == 2: # >=
+        if renglon >= valor_a_comparar:
+            return True
+        else:
+            return False
+    elif decision == 3: # <
+        if renglon < valor_a_comparar:
+            return True
+        else:
+            return False
+    elif decision == 4: # <=
+        if renglon <= valor_a_comparar:
+            return True
+        else:
+            return False
+    else:
+        return True
+    
+
+
+#print(listadoArchivos())
+df = elegirArchivo('../files/13428_2015_684_MOESM1_ESM.xlsx')
+busquedaRenglonesNumeros(1, df, 27, 'VAL_N' , ['Word','VAL_M' , 'VAL_SD', 'VAL_N'])
+#aux = descripcionColumna('VAL_M', df)
+#aux = descripcionColumna('Word', df).to_dict()
+#print(aux)
+
+
+
+
+#new_dict = df.to_dict()
+#print(df.columns)
+
+#guarda = descripcionColumna('AVA_N')
+#aux = df['AVA_N'].tolist()      #Con esto cohnviertes una columna en una lista
+#print(aux)
+#print(type(guarda))
+#print(df['Word'].describe())
 #print(df.dtypes)
 '''
 Los strings los cuenta como  object
