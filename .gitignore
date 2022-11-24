@@ -3,7 +3,7 @@
 *.csv
 
 # excluir el folder lo que hay en el folder
-files/*
+#files/*
 
 #excepcion a la regla
-!files/result/.gitkeep
+#!files/result/.gitkeep
