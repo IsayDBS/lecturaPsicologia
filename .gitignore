@@ -1,2 +1,9 @@
 #   Ignora los files
 *.xlsx
+*.csv
+
+# excluir el folder lo que hay en el folder
+files/*
+
+#excepcion a la regla
+!files/result/.gitkeep

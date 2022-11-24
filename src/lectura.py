@@ -4,11 +4,16 @@ import os
 
 #Listado de archivos
 def listadoArchivos():
-    return os.listdir('../files')
+    return os.listdir('./files')
+
+def formatoArchivos():
+    lista = listadoArchivos()
+    for i in range(len(lista)):
+        print(str(i + 1) + '.- ' + lista[i])
 
 #Seleccionador de archivo
-def elegirArchivo(archivo):
-    #Agregar la versión .csv
+def elegirArchivoXLSX(archivo):
+    #print(archivo)
     return pd.read_excel(archivo)
 
 #Convertir descripcion en diccionario
@@ -75,12 +80,37 @@ def decisionNumeroRenglon(decision, renglon, valor_a_comparar):
             return False
     else:
         return True
-    
 
+#Seleccionador de archivos csv
+def elegirArchivoCSV(archivo):
+    #print(archivo)
+    return pd.read_csv(archivo)
 
-#print(listadoArchivos())
-df = elegirArchivo('../files/13428_2015_684_MOESM1_ESM.xlsx')
-busquedaRenglonesNumeros(1, df, 27, 'VAL_N' , ['Word','VAL_M' , 'VAL_SD', 'VAL_N'])
+#Eleccion de archivo
+def seleccionArchivoALeer(lista, eleccion):
+    aux = os.path.splitext(lista[eleccion-1])
+    #print(aux)
+    if aux[1] == '.xls' or aux[1] == '.xlsx' or aux[1] == '.xlsm' or aux[1] == '.xlsb' or aux[1] == '.odf' or aux[1] == '.ods' or aux[1] == '.odt':#xls, xlsx, xlsm, xlsb, odf, ods and odt 
+        print('./files/' + lista[eleccion - 1])
+        return elegirArchivoXLSX('./files/' + lista[eleccion - 1])
+    elif aux[1] == '.csv':
+        print('./files/' + lista[eleccion - 1])
+        return elegirArchivoCSV('./files/' + lista[eleccion - 1])
+    else:
+        print('Archivo no válido')
+
+formatoArchivos()
+input1 = int(input())
+df = seleccionArchivoALeer(listadoArchivos(), input1)
+
+print(df)
+
+#df = elegirArchivoXLSX('./files/13428_2013_403_MOESM1_ESM.xlsx')
+
+#df = elegirArchivoCSV('./files/simon-task_109.csv')
+
+#df = elegirArchivo('../files/13428_2015_684_MOESM1_ESM.xlsx')
+#busquedaRenglonesNumeros(1, df, 27, 'VAL_N' , ['Word','VAL_M' , 'VAL_SD', 'VAL_N'])
 #aux = descripcionColumna('VAL_M', df)
 #aux = descripcionColumna('Word', df).to_dict()
 #print(aux)

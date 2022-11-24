@@ -20,4 +20,11 @@ En caso de que no esté pandas en el ambiente, utilizar
 conda install pandas
 ```
 
+# Como funciona
 
+Agregar los archivos a analizar en la carpeta files, después correr con
+```
+python3 ./src/lectura.py
+```
+
+Mostrará los archivos disponibles para leer en terminal.
